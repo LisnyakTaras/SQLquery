@@ -141,3 +141,4 @@ JOIN Emps on Emps.UserID = USERS.UserID
 WHERE OrgName = 'ТПЦ 2'
 AND OKLAD = (SELECT MIN(OKLAD) FROM Emps)
 GO
+2
