@@ -21,7 +21,8 @@ Create table ACTIVEBOOK
 	ACTIVE_NOMBER NVARCHAR(255),
 	CFO NVARCHAR(255),
 	OPERATION_TERM NVARCHAR(255),
-	COST_HMA REAL
+	COST_HMA REAL,
+	DATE_LOAD smalldatetime 
 )
 go
 
@@ -33,6 +34,37 @@ CREATE TABLE dbo.LOCATION
 	City nvarchar(255),
 	ADRESS_LOCATION nvarchar(255),
 	)
+go
+--Таблица для данных для типов оборудования.
+Create table dbo.EQUIPMENT_TYPE
+(
+	PLURAL_NAME NVARCHAR(255),
+	NAME_TYPE NVARCHAR(255),
+	ID INT IDENTITY PRIMARY KEY
+)
+go
+
+
+--Таблица для оборудования.
+CREATE TABLE dbo.EQUIPMENTS
+	(
+	ID INT IDENTITY PRIMARY KEY,
+	ID_TYPE int,
+	NAME_EQ nvarchar(255),
+	SN_EQ nvarchar(255),
+	INVENTORY nvarchar(255),
+	CHANGE_TIME smalldatetime,
+	CHANGE_ADMIN nvarchar(255),
+	DATE_OF_MANUFACTURE smallint,
+	COMMENTS nvarchar(255)
+	)
+go
+ALTER TABLE EQUIPMENTS
+ADD CONSTRAINT FK_EQUIPMENTS_EQUIPMENT_TYPE
+FOREIGN KEY (ID_TYPE) REFERENCES EQUIPMENT_TYPE(ID)
+GO
+
+
 
 --Таблица для данных из ActiveDirectory по компам.
 Create table ADcompList
@@ -92,7 +124,7 @@ CREATE TABLE USERPLACEs_History
 	INV_PRINTER NVARCHAR(255),
 	INV_UPS NVARCHAR(255),
 	INV_SCANNER NVARCHAR(255),
-	USER_LOGIN NVARCHAR(255),
+	USER_PHONE NVARCHAR(255),
 	USER_ROOM NVARCHAR(255),
 	DATA_MODIFY smalldatetime,
 	WRITER NVARCHAR(255),
@@ -117,7 +149,7 @@ BEGIN /* Создание тригеров для Таблицы USERPLACEs*/
 	for update
 	AS
 		INSERT INTO PackOTP.dbo.USERPLACEs_History
-		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_LOGIN,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
+		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_PHONE,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
 		SELECT
 		'1',ID_LOCATION, ID, [IP] ,	COMP ,	INV_SYSBLOCK, INV_MONITOR, INV_PRINTER , INV_UPS, INV_SCANNER, USER_PHONE, USER_ROOM,	DATA_MODIFY, WRITER,	COMMENTS
 		FROM inserted
@@ -128,7 +160,7 @@ BEGIN /* Создание тригеров для Таблицы USERPLACEs*/
 	for INSERT
 	AS
 		INSERT INTO PackOTP.dbo.USERPLACEs_History
-		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_LOGIN,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
+		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_PHONE,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
 		SELECT
 		'3',ID_LOCATION, ID, [IP] ,	COMP ,INV_SYSBLOCK, INV_MONITOR, INV_PRINTER , INV_UPS, INV_SCANNER, USER_PHONE, USER_ROOM,	DATA_MODIFY, WRITER,	COMMENTS
 		FROM inserted
@@ -140,7 +172,7 @@ BEGIN /* Создание тригеров для Таблицы USERPLACEs*/
 	for DELETE
 	AS
 		INSERT INTO PackOTP.dbo.USERPLACEs_History
-		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_LOGIN,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
+		(ID_STATUS ,ID_LOCATION,	ID_USRPLACEs ,	[IP] ,	COMP ,	INV_SYSBLOCK,	INV_MONITOR,	INV_PRINTER ,	INV_UPS,	INV_SCANNER,	USER_PHONE,	USER_ROOM,	DATA_MODIFY,WRITER,	COMMENTS)
 		SELECT
 		'2',ID_LOCATION, ID, [IP] ,	COMP ,INV_SYSBLOCK, INV_MONITOR, INV_PRINTER , INV_UPS, INV_SCANNER, USER_PHONE, USER_ROOM,DATA_MODIFY, WRITER,COMMENTS
 		FROM deleted
@@ -179,6 +211,93 @@ ADD CONSTRAINT FK_SYSBLOCKTEST_USERPLACE
 FOREIGN KEY (ID_USERPLASE) REFERENCES USERPLACEs(ID)
 	ON DELETE  CASCADE --если удалится запись по USERPLACEs, то и удалятся все записи тестов связаные с данным USERPLACEs
 GO
+
+------------------------------------------------------------------------------------------------------------------------------------
+--таблицы для учета комлектующих
+
+USE PackOTP
+CREATE TABLE dbo.ComponentType
+	(ID tinyint IDENTITY PRIMARY KEY,
+	 [Name_Type] nvarchar(255)
+	)
+GO
+
+CREATE TABLE dbo.ComponentStatus
+	(ID tinyint IDENTITY PRIMARY KEY,
+	 [Name_Status] nvarchar(255)
+	)
+GO
+
+CREATE TABLE dbo.ComponentParts
+	(ID smallint IDENTITY PRIMARY KEY,
+	 ID_ComponentType tinyint,
+	 [Name_Component] nvarchar(255)
+	)
+ALTER TABLE ComponentParts
+ADD CONSTRAINT FK_Component_ComponentType
+FOREIGN KEY (ID_ComponentType) REFERENCES ComponentType(ID)
+GO
+
+CREATE TABLE dbo.Organization
+	(ID tinyint IDENTITY PRIMARY KEY,
+	 [Name_Organization] nvarchar(255)
+	)
+GO
+
+CREATE TABLE dbo.ComponentState
+	(ID INT IDENTITY PRIMARY KEY,
+	 ID_ComponentParts smallint NOT NULL,
+	 ID_Organization tinyint NOT NULL,
+	 Quantity smallint NOT NULL,
+	 [ID_Location] int NOT NULL
+	)
+GO
+ALTER TABLE ComponentState
+ADD CONSTRAINT FK_Component_State_ComponentParts
+FOREIGN KEY (ID_ComponentParts) REFERENCES ComponentParts(ID)
+
+ALTER TABLE ComponentState
+ADD CONSTRAINT FK_Component_State_Organization
+FOREIGN KEY (ID_Organization) REFERENCES Organization(ID)
+
+ALTER TABLE ComponentState
+ADD CONSTRAINT FK_Component_State_Location
+FOREIGN KEY ([ID_Location]) REFERENCES [LOCATION](ID)
+
+
+CREATE TABLE dbo.ComponentActions
+	(ID INT IDENTITY PRIMARY KEY,
+	[ID_Location] int NOT NULL,
+	 ID_ComponentParts smallint NOT NULL,
+	 ID_Organization tinyint NOT NULL,
+	 ID_Status tinyint not null,
+	 Quantity smallint NOT NULL,
+	 Document nvarchar(255),
+	 [Location_Action] int,
+	 [Date_Action] smalldatetime NOT NULL,
+	 UserLogin nvarchar(255) not null,
+	 Comments nvarchar(255)
+	)
+GO
+ALTER TABLE ComponentActions
+ADD CONSTRAINT FK_ComponentActions_ComponentParts
+FOREIGN KEY (ID_ComponentParts) REFERENCES ComponentParts(ID)
+
+ALTER TABLE ComponentActions
+ADD CONSTRAINT FK_ComponentActions_Organization
+FOREIGN KEY (ID_Organization) REFERENCES Organization(ID)
+
+ALTER TABLE ComponentActions
+ADD CONSTRAINT FK_ComponentActions_Location
+FOREIGN KEY ([ID_Location]) REFERENCES [LOCATION](ID)
+
+ALTER TABLE ComponentActions
+ADD CONSTRAINT FK_ComponentActions_LocationAction
+FOREIGN KEY ([Location_Action]) REFERENCES [LOCATION](ID)
+
+ALTER TABLE ComponentActions
+ADD CONSTRAINT FK_ComponentActions_ComponentStatus
+FOREIGN KEY (ID_Status) REFERENCES ComponentStatus(ID)
 
 
 

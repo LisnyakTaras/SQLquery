@@ -35,5 +35,5 @@ left join v_GS_PROCESSOR PROCESSOR on [SYSTEM].ResourceID = PROCESSOR.ResourceID
 left join v_GS_BASEBOARD BASEBOARD on [SYSTEM].ResourceID = BASEBOARD.ResourceID
 left join v_GS_OPERATING_SYSTEM OPERATING_S on [SYSTEM].ResourceID =OPERATING_S.ResourceID
 left join v_R_System R_System on  [SYSTEM].ResourceID = R_System.ResourceID
-where [SYSTEM].Domain0 = 'atbmarket.com' and SystemRole0 = 'Workstation'
---where COMPUTER.Name0 = 'market-070-145'
+--where [SYSTEM].Domain0 = 'atbmarket.com' and SystemRole0 = 'Workstation'
+where COMPUTER.Name0 = 'MARKET-070-145'
