@@ -1,20 +1,30 @@
 USE [ASPnetIdentity]
 GO
 
-if OBJECT_ID ('AspNetUsers_UserAddToRole') IS NOT NULL
+if OBJECT_ID ('AspNetUsers_UserAddToRoleByID') IS NOT NULL
 BEGIN 
-	DROP PROC AspNetUsers_UserAddToRole
+	DROP PROC AspNetUsers_UserAddToRoleByID
 END
 
 GO
 
-CREATE PROC AspNetUsers_UserAddToRole
-    @RoleName         nvarchar(256)
+CREATE PROC AspNetUsers_UserAddToRoleByID
+	@ID_User 		nvarchar(128)
+    ,@ID_Role         nvarchar(128)
 	AS
-	BEGIN
-	SELECT USERS.ID,USERS.[UserName],ROLES.[ID] ,ROLES.[Name]
+BEGIN
+	INSERT INTO AspNetUserRoles
+		(UserId, RoleId)
+	VALUES
+		(@ID_User, @ID_Role);
 
-	FROM [ASPnetIdentity].[dbo].[AspNetUsers] USERS
-	INNER JOIN [ASPnetIdentity].[dbo].[AspNetUserRoles] UserRoles ON USERS.ID = UserRoles.UserId
-	INNER JOIN [ASPnetIdentity].[dbo].AspNetRoles ROLES ON UserRoles.RoleId = ROLES.Id
 END
+
+
+--Смотрим имена колонок и их тип в таблицах AspNetUsers, AspNetUserRoles, AspNetRoles
+USE [ASPnetIdentity]
+
+SELECT COLUMN_NAME AS CN_AspNetUsers, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = N'AspNetUserRoles'
+GO
