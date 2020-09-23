@@ -23,13 +23,13 @@ CREATE PROC AspNetUsers_GetAllUsers
 	FROM [ASPnetIdentity].[dbo].[AspNetUsers] USERS
 END
 
-
+--Выполняем процедуру
 exec AspNetUsers_GetAllUsers
 
 
-
+--Смотрим имена колонок в таблицах AspNetUsers
 USE [ASPnetIdentity]
 go
-SELECT COLUMN_NAME
+SELECT COLUMN_NAME AS CN_AspNetUsers
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = N'AspNetUsers'
