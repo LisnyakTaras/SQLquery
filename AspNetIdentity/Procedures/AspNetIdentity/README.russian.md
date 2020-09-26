@@ -1,19 +1,19 @@
-# Процедуры для  AspNetIdentity
+# ╨Я╤А╨╛╤Ж╨╡╨┤╤Г╤А╤Л ╨┤╨╗╤П  AspNetIdentity
     
 
 
 ## About <a name = "abaut"></a>
 
-Данные процедуры работают со стандартной базой данных AspNetIdentity, созданой по дефолту 
+╨Ф╨░╨╜╨╜╤Л╨╡ ╨┐╤А╨╛╤Ж╨╡╨┤╤Г╤А╤Л ╤А╨░╨▒╨╛╤В╨░╤О╤В ╤Б╨╛ ╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╣ ╨▒╨░╨╖╨╛╨╣ ╨┤╨░╨╜╨╜╤Л╤Е AspNetIdentity, ╤Б╨╛╨╖╨┤╨░╨╜╨╛╨╣ ╨┐╨╛ ╨┤╨╡╤Д╨╛╨╗╤В╤Г 
 
-## Список процедур <a name = "getting_started"></a>
+## ╨б╨┐╨╕╤Б╨╛╨║ ╨┐╤А╨╛╤Ж╨╡╨┤╤Г╤А <a name = "getting_started"></a>
 
 AspNetRole_GetRoleList
 AspNetRole_NewRole
 AspNetUsers_GetListRolesByUserId
 
 
-AspNetUsers_GetListUsersWithRole --таблица с свойствами пользователя + столбец в который записаны все группы определенного пользователя
+AspNetUsers_GetListUsersWithRole --╤В╨░╨▒╨╗╨╕╤Ж╨░ ╤Б ╤Б╨▓╨╛╨╣╤Б╤В╨▓╨░╨╝╨╕ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П + ╤Б╤В╨╛╨╗╨▒╨╡╤Ж ╨▓ ╨║╨╛╤В╨╛╤А╤Л╨╣ ╨╖╨░╨┐╨╕╤Б╨░╨╜╤Л ╨▓╤Б╨╡ ╨│╤А╤Г╨┐╨┐╤Л ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╜╨╛╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П
 AspNetUsers_GetAllUsers
 
 AspNetUsers_UserAddToRoleByID
