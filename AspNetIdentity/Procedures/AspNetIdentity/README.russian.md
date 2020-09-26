@@ -8,14 +8,14 @@
 
 ## Список процедур <a name = "getting_started"></a>
 
--AspNetRole_GetRoleList
--AspNetRole_NewRole
--AspNetUsers_GetListRolesByUserId
+*AspNetRole_GetRoleList
+*AspNetRole_NewRole
+*AspNetUsers_GetListRolesByUserId
 
--AspNetUsers_GetListUsersWithRole --таблица с свойствами пользователя + столбец в который записаны все группы определенного пользователя
--AspNetUsers_GetAllUsers
+*AspNetUsers_GetListUsersWithRole (таблица с свойствами пользователя + столбец в который записаны все группы определенного пользователя)
+*AspNetUsers_GetAllUsers
 
--AspNetUsers_UserAddToRoleByID
--AspNetUsers_UserDeleteFromRoleById
--AspNetUsers_UserUpdate
--AspNetUsers_UserDelete
+*AspNetUsers_UserAddToRoleByID
+*AspNetUsers_UserDeleteFromRoleById
+*AspNetUsers_UserUpdate
+*AspNetUsers_UserDelete
