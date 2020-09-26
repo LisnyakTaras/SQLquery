@@ -1,14 +1,16 @@
 USE [ASPnetIdentity]
 GO
 
-if OBJECT_ID ('AspNetUsers_GetListUsersWithRole') IS NOT NULL
+if OBJECT_ID ('AspNetUsers_GetListRolesByUserId') IS NOT NULL
 BEGIN 
-	DROP PROC AspNetUsers_GetListUsersWithRole
+	DROP PROC AspNetUsers_GetListRolesByUserId
 END
 
 GO
 
-CREATE PROC AspNetUsers_GetListUsersWithRole
+CREATE PROC AspNetUsers_GetListRolesByUserId(
+    @USERID nvarchar(128)
+)
 	AS
 	BEGIN
 	--Содаем временную таблицу для сведения трех таблиц AspNetUsers, AspNetUserRoles, AspNetRoles
@@ -27,6 +29,7 @@ CREATE PROC AspNetUsers_GetListUsersWithRole
 	,RolesName = STUFF ((select '; ' + CAST( US.NameRole as nvarchar(255)) from @UsersRoles US where users.Id = US.ID_User FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(max)'), 1, 1, '')
 
 	FROM [ASPnetIdentity].[dbo].[AspNetUsers] USERS
+    WHERE USERS.Id = @USERID
 
 
 END
@@ -35,7 +38,7 @@ END
 USE [ASPnetIdentity]
 GO
 --Выполняем процедуру
-exec AspNetUsers_GetListUsersWithRole
+exec AspNetUsers_GetListRolesById 
 
 --Смотрим имена колонок и их тип в таблицах AspNetUsers, AspNetUserRoles, AspNetRoles
 USE [ASPnetIdentity]

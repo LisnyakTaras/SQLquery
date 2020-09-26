@@ -10,12 +10,13 @@ GO
 
 CREATE PROC AspNetRole_NewRole
 	@RoleName 		nvarchar(256)
+	,@Description 	NVARCHAR(256)
 	AS
 BEGIN
 	INSERT INTO AspNetRoles
-		(id, [Name])
+		(id, [Name], [Description])
 	VALUES
-		(NEWID(), @RoleName);
+		(NEWID(), @RoleName, @Description);
 END
 
 
